@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { supabase, isOnline } from '@/lib/supabase';
+import { getSupabase, isOnline } from '@/lib/supabase';
 import { CM_STAGES, DraftStage, TURN_TIME, getRandomAvailableHero } from '@/lib/cm-rules';
 import { useHeroStore } from './hero-store';
 
@@ -77,9 +77,12 @@ export const useLobbyStore = create<LobbyState>((set, get) => ({
       return code;
     }
 
+    const sb = await getSupabase();
+    if (!sb) throw new Error('Supabase not configured');
+
     const code = generateCode();
     const playerId = generatePlayerId();
-    const { data, error } = await supabase!.from('lobbies').insert({
+    const { data, error } = await sb.from('lobbies').insert({
       code,
       status: 'waiting',
       current_stage: 0,
@@ -111,7 +114,10 @@ export const useLobbyStore = create<LobbyState>((set, get) => ({
   joinLobby: async (code: string, playerName: string) => {
     if (!isOnline()) return false;
 
-    const { data: lobbies } = await supabase!.from('lobbies')
+    const sb = await getSupabase();
+    if (!sb) return false;
+
+    const { data: lobbies } = await sb.from('lobbies')
       .select('*')
       .eq('code', code.toUpperCase())
       .eq('status', 'waiting')
@@ -120,7 +126,7 @@ export const useLobbyStore = create<LobbyState>((set, get) => ({
     if (!lobbies) return false;
 
     const playerId = generatePlayerId();
-    await supabase!.from('lobbies').update({
+    await sb.from('lobbies').update({
       dire_player: playerName,
       dire_player_id: playerId,
       status: 'drafting',
@@ -194,17 +200,20 @@ export const useLobbyStore = create<LobbyState>((set, get) => ({
     });
 
     if (isOnline() && state.lobbyId) {
-      await supabase!.from('lobbies').update({
-        current_stage: newIndex,
-        radiant_picks: newRadiantPicks,
-        radiant_bans: newRadiantBans,
-        dire_picks: newDirePicks,
-        dire_bans: newDireBans,
-        history: newHistory,
-        time_remaining: TURN_TIME,
-        last_action_by: playerId,
-        status: isComplete ? 'completed' : 'drafting',
-      }).eq('id', state.lobbyId);
+      const sb = await getSupabase();
+      if (sb) {
+        await sb.from('lobbies').update({
+          current_stage: newIndex,
+          radiant_picks: newRadiantPicks,
+          radiant_bans: newRadiantBans,
+          dire_picks: newDirePicks,
+          dire_bans: newDireBans,
+          history: newHistory,
+          time_remaining: TURN_TIME,
+          last_action_by: playerId,
+          status: isComplete ? 'completed' : 'drafting',
+        }).eq('id', state.lobbyId);
+      }
     }
   },
 
@@ -224,7 +233,8 @@ export const useLobbyStore = create<LobbyState>((set, get) => ({
     } else {
       set({ timeRemaining: newTime });
       if (isOnline() && state.lobbyId) {
-        await supabase!.from('lobbies').update({ time_remaining: newTime }).eq('id', state.lobbyId);
+        const sb = await getSupabase();
+        if (sb) await sb.from('lobbies').update({ time_remaining: newTime }).eq('id', state.lobbyId);
       }
     }
   },
@@ -233,40 +243,45 @@ export const useLobbyStore = create<LobbyState>((set, get) => ({
     if (!isOnline() || !get().lobbyId) return;
     const lobbyId = get().lobbyId;
 
-    channel = supabase!.channel(`lobby:${lobbyId}`)
-      .on('postgres_changes', {
-        event: 'UPDATE',
-        schema: 'public',
-        table: 'lobbies',
-        filter: `id=eq.${lobbyId}`,
-      }, (payload) => {
-        const d = payload.new as any;
-        const myTeam = get().myTeam;
-        set({
-          status: d.status,
-          currentStageIndex: d.current_stage,
-          timeRemaining: d.time_remaining,
-          radiantPicks: d.radiant_picks || [],
-          radiantBans: d.radiant_bans || [],
-          direPicks: d.dire_picks || [],
-          direBans: d.dire_bans || [],
-          history: d.history || [],
-          radiantPlayer: d.radiant_player,
-          direPlayer: d.dire_player,
-          lastActionBy: d.last_action_by,
-        });
+    getSupabase().then((sb: any) => {
+      if (!sb) return;
+      channel = sb.channel(`lobby:${lobbyId}`)
+        .on('postgres_changes', {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'lobbies',
+          filter: `id=eq.${lobbyId}`,
+        }, (payload: any) => {
+          const d = payload.new;
+          const myTeam = get().myTeam;
+          set({
+            status: d.status,
+            currentStageIndex: d.current_stage,
+            timeRemaining: d.time_remaining,
+            radiantPicks: d.radiant_picks || [],
+            radiantBans: d.radiant_bans || [],
+            direPicks: d.dire_picks || [],
+            direBans: d.dire_bans || [],
+            history: d.history || [],
+            radiantPlayer: d.radiant_player,
+            direPlayer: d.dire_player,
+            lastActionBy: d.last_action_by,
+          });
 
-        const currentStage = CM_STAGES[d.current_stage];
-        if (currentStage && d.status === 'drafting') {
-          set({ isMyTurn: currentStage.team === myTeam });
-        }
-      })
-      .subscribe();
+          const currentStage = CM_STAGES[d.current_stage];
+          if (currentStage && d.status === 'drafting') {
+            set({ isMyTurn: currentStage.team === myTeam });
+          }
+        })
+        .subscribe();
+    });
   },
 
   unsubscribeFromLobby: () => {
     if (channel) {
-      supabase?.removeChannel(channel);
+    getSupabase().then((sb: any) => {
+        if (sb && channel) sb.removeChannel(channel);
+      });
       channel = null;
     }
   },
@@ -274,7 +289,8 @@ export const useLobbyStore = create<LobbyState>((set, get) => ({
   endDraft: async () => {
     const state = get();
     if (isOnline() && state.lobbyId) {
-      await supabase!.from('lobbies').update({ status: 'completed' }).eq('id', state.lobbyId);
+      const sb = await getSupabase();
+      if (sb) await sb.from('lobbies').update({ status: 'completed' }).eq('id', state.lobbyId);
     }
     set({ status: 'completed' });
   },

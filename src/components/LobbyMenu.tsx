@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLobbyStore } from '@/stores/lobby-store';
-import { isOnline, supabase } from '@/lib/supabase';
+import { isOnline, getSupabase } from '@/lib/supabase';
 import { cn } from '@/lib/utils';
 
 interface LobbyMenuProps {
@@ -205,7 +205,9 @@ function DraftHistory() {
         setLoading(false);
         return;
       }
-      const { data } = await supabase!.from('lobbies')
+      const sb = await getSupabase();
+      if (!sb) { setLoading(false); return; }
+      const { data } = await sb.from('lobbies')
         .select('id, code, radiant_player, dire_player, radiant_picks, dire_picks, radiant_bans, dire_bans, created_at')
         .eq('status', 'completed')
         .order('created_at', { ascending: false })
