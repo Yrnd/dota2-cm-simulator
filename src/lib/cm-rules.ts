@@ -6,7 +6,7 @@ export interface DraftStage {
 }
 
 export const CM_STAGES: DraftStage[] = [
-  // Phase 1: 7 bans, 4 picks
+  // Phase 1: 7 bans, 2 picks
   { phase: 1, type: 'ban', team: 'radiant', order: 1 },
   { phase: 1, type: 'ban', team: 'radiant', order: 2 },
   { phase: 1, type: 'ban', team: 'dire', order: 3 },
@@ -16,26 +16,23 @@ export const CM_STAGES: DraftStage[] = [
   { phase: 1, type: 'ban', team: 'dire', order: 7 },
   { phase: 1, type: 'pick', team: 'radiant', order: 8 },
   { phase: 1, type: 'pick', team: 'dire', order: 9 },
-  { phase: 1, type: 'pick', team: 'radiant', order: 10 },
-  { phase: 1, type: 'pick', team: 'dire', order: 11 },
-  // Phase 2: 4 bans, 4 picks
-  { phase: 2, type: 'ban', team: 'radiant', order: 12 },
-  { phase: 2, type: 'ban', team: 'dire', order: 13 },
-  { phase: 2, type: 'ban', team: 'radiant', order: 14 },
-  { phase: 2, type: 'ban', team: 'dire', order: 15 },
-  { phase: 2, type: 'pick', team: 'radiant', order: 16 },
+  // Phase 2: 3 bans, 6 picks
+  { phase: 2, type: 'ban', team: 'radiant', order: 10 },
+  { phase: 2, type: 'ban', team: 'radiant', order: 11 },
+  { phase: 2, type: 'ban', team: 'dire', order: 12 },
+  { phase: 2, type: 'pick', team: 'dire', order: 13 },
+  { phase: 2, type: 'pick', team: 'radiant', order: 14 },
+  { phase: 2, type: 'pick', team: 'radiant', order: 15 },
+  { phase: 2, type: 'pick', team: 'dire', order: 16 },
   { phase: 2, type: 'pick', team: 'dire', order: 17 },
   { phase: 2, type: 'pick', team: 'radiant', order: 18 },
-  { phase: 2, type: 'pick', team: 'dire', order: 19 },
-  // Phase 3: 4 bans, 4 picks
-  { phase: 3, type: 'ban', team: 'radiant', order: 20 },
-  { phase: 3, type: 'ban', team: 'dire', order: 21 },
-  { phase: 3, type: 'ban', team: 'radiant', order: 22 },
-  { phase: 3, type: 'ban', team: 'dire', order: 23 },
-  { phase: 3, type: 'pick', team: 'radiant', order: 24 },
-  { phase: 3, type: 'pick', team: 'dire', order: 25 },
-  { phase: 3, type: 'pick', team: 'radiant', order: 26 },
-  { phase: 3, type: 'pick', team: 'dire', order: 27 },
+  // Phase 3: 4 bans, 2 picks
+  { phase: 3, type: 'ban', team: 'radiant', order: 19 },
+  { phase: 3, type: 'ban', team: 'dire', order: 20 },
+  { phase: 3, type: 'ban', team: 'radiant', order: 21 },
+  { phase: 3, type: 'ban', team: 'dire', order: 22 },
+  { phase: 3, type: 'pick', team: 'radiant', order: 23 },
+  { phase: 3, type: 'pick', team: 'dire', order: 24 },
 ];
 
 export const TOTAL_STAGES = CM_STAGES.length;
