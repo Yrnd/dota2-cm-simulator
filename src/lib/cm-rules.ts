@@ -39,6 +39,30 @@ export const TOTAL_STAGES = CM_STAGES.length;
 export const BONUS_TIME = 130;
 export const TURN_TIME = 30;
 
+export type CoinFlipResult = 'heads' | 'tails';
+
+export interface CoinFlipState {
+  result: CoinFlipResult | null;
+  winner: 'player1' | 'player2' | null;
+  choice: 'side' | 'order' | null;
+  chosenSide: 'radiant' | 'dire' | null;
+  chosenOrder: 'first' | 'second' | null;
+  isFlipping: boolean;
+  phase: 'idle' | 'flipping' | 'choosing_side_or_order' | 'choosing' | 'done';
+}
+
+export function flipCoin(): CoinFlipResult {
+  return Math.random() < 0.5 ? 'heads' : 'tails';
+}
+
+export function getSwappedStages(stages: DraftStage[], swap: boolean): DraftStage[] {
+  if (!swap) return stages;
+  return stages.map(s => ({
+    ...s,
+    team: s.team === 'radiant' ? 'dire' : 'radiant',
+  }));
+}
+
 export function getRandomAvailableHero(availableHeroes: number[]): number {
   return availableHeroes[Math.floor(Math.random() * availableHeroes.length)];
 }

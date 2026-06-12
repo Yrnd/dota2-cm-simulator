@@ -6,13 +6,14 @@ import { WinProbabilityChart } from './components/WinProbabilityChart';
 import { Recommendations } from './components/Recommendations';
 import { MatchImport } from './components/MatchImport';
 import { LobbyMenu } from './components/LobbyMenu';
+import { CoinFlip } from './components/CoinFlip';
 import { useDraftStore } from './stores/draft-store';
 import { useLobbyStore } from './stores/lobby-store';
 import { useCalculationStore } from './stores/calculation-store';
 import { CM_STAGES, TOTAL_STAGES } from '@/lib/cm-rules';
 import { cn } from './lib/utils';
 
-type Screen = 'menu' | 'lobby_menu' | 'draft';
+type Screen = 'menu' | 'lobby_menu' | 'coinflip' | 'draft';
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>('menu');
@@ -81,7 +82,7 @@ export default function App() {
           </div>
           <div className="space-y-2">
             <button
-              onClick={() => { localReset(); setScreen('draft'); }}
+              onClick={() => { localReset(); setScreen('coinflip'); }}
               className="dota-btn dota-btn-gold w-full py-2.5 text-xs"
             >
               LOCAL DRAFT
@@ -101,6 +102,26 @@ export default function App() {
   // ═══ LOBBY MENU SCREEN ═══
   if (screen === 'lobby_menu') {
     return <LobbyMenu onBack={() => setScreen('menu')} />;
+  }
+
+  // ═══ COIN FLIP SCREEN ═══
+  if (screen === 'coinflip') {
+    const { phase } = useDraftStore.getState().coinFlip;
+    return (
+      <>
+        <CoinFlip />
+        {phase === 'done' && (
+          <div className="fixed bottom-8 left-1/2 -translate-x-1/2">
+            <button
+              onClick={() => { localStart(); setScreen('draft'); }}
+              className="dota-btn dota-btn-gold px-8 py-3 text-sm"
+            >
+              START DRAFT
+            </button>
+          </div>
+        )}
+      </>
+    );
   }
 
   // ═══ DRAFT SCREEN ═══
