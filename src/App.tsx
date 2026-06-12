@@ -9,7 +9,7 @@ import { LobbyMenu } from './components/LobbyMenu';
 import { useDraftStore } from './stores/draft-store';
 import { useLobbyStore } from './stores/lobby-store';
 import { useCalculationStore } from './stores/calculation-store';
-import { CM_STAGES } from '@/lib/cm-rules';
+import { CM_STAGES, TOTAL_STAGES } from '@/lib/cm-rules';
 import { cn } from './lib/utils';
 
 type Screen = 'menu' | 'lobby_menu' | 'draft';
@@ -39,7 +39,7 @@ export default function App() {
   const currentStageIndex = isLobby ? lobbyIndex : localIndex;
   const timeRemaining = isLobby ? lobbyTime : localTime;
   const stage = isLobby
-    ? (currentStageIndex < 24 ? CM_STAGES[currentStageIndex] : null)
+    ? (currentStageIndex < TOTAL_STAGES ? CM_STAGES[currentStageIndex] : null)
     : localGetStage();
   const isWarning = timeRemaining <= 10;
   const isCritical = timeRemaining <= 5;
@@ -147,7 +147,7 @@ export default function App() {
               isActive ? (stage?.team === 'radiant' ? 'bg-[#4b9e4b]' : 'bg-[#b8312a]') : 'bg-[#3d4250]',
             )} />
             <span className="text-[11px] font-medium text-[#7a7568]">
-              {isComplete ? 'COMPLETE' : `STAGE ${currentStageIndex + 1}/24`}
+              {isComplete ? 'COMPLETE' : `STAGE ${currentStageIndex + 1}/${TOTAL_STAGES}`}
             </span>
             {isActive && (
               <span className={cn(
@@ -239,7 +239,7 @@ export default function App() {
                 {radiantPlayer || 'Radiant'} vs {direPlayer || 'Dire'}
               </p>
             )}
-            <p className="text-xs text-[#7a7568] mb-5">All 24 stages have been completed</p>
+            <p className="text-xs text-[#7a7568] mb-5">All {TOTAL_STAGES} stages have been completed</p>
             <button onClick={handleEndDraft} className="dota-btn dota-btn-gold w-full py-2 text-xs">
               {isLobby ? 'END & BACK TO MENU' : 'NEW DRAFT'}
             </button>

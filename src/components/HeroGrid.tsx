@@ -3,6 +3,7 @@ import { useHeroStore } from '@/stores/hero-store';
 import { useDraftStore } from '@/stores/draft-store';
 import { useLobbyStore } from '@/stores/lobby-store';
 import { useCalculationStore } from '@/stores/calculation-store';
+import { TOTAL_STAGES } from '@/lib/cm-rules';
 import { cn } from '@/lib/utils';
 import { Hero, HeroRole, ROLE_LABELS, ALL_ROLES } from '@/data/heroes';
 
@@ -88,7 +89,7 @@ export function HeroGrid() {
   };
 
   const handleHeroClick = (heroId: number) => {
-    if (getHeroStatus(heroId) !== 'available' || currentStageIndex >= 24 || !isActive) return;
+    if (getHeroStatus(heroId) !== 'available' || currentStageIndex >= TOTAL_STAGES || !isActive) return;
     if (isLobby && !isMyTurn) return;
 
     if (isLobby) {

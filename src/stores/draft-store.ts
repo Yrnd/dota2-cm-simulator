@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { CM_STAGES, DraftStage, BONUS_TIME, TURN_TIME, getRandomAvailableHero } from '@/lib/cm-rules';
+import { CM_STAGES, DraftStage, BONUS_TIME, TURN_TIME, TOTAL_STAGES, getRandomAvailableHero } from '@/lib/cm-rules';
 import { useHeroStore } from './hero-store';
 
 interface DraftState {
@@ -46,14 +46,14 @@ export const useDraftStore = create<DraftState>((set, get) => ({
 
   performAction: (heroId) => {
     const state = get();
-    if (state.currentStageIndex >= 24) return;
+    if (state.currentStageIndex >= TOTAL_STAGES) return;
     const stage = CM_STAGES[state.currentStageIndex];
     const newState: Partial<DraftState> = {
       history: [...state.history, { stage, heroId }],
       currentStageIndex: state.currentStageIndex + 1,
       timeRemaining: TURN_TIME,
-      isComplete: state.currentStageIndex + 1 >= 24,
-      isActive: state.currentStageIndex + 1 < 24 ? state.isActive : false,
+      isComplete: state.currentStageIndex + 1 >= TOTAL_STAGES,
+      isActive: state.currentStageIndex + 1 < TOTAL_STAGES ? state.isActive : false,
     };
     if (stage.type === 'ban') {
       if (stage.team === 'radiant') newState.radiantBans = [...state.radiantBans, heroId];
@@ -67,7 +67,7 @@ export const useDraftStore = create<DraftState>((set, get) => ({
 
   passTime: () => {
     const state = get();
-    if (!state.isActive || state.currentStageIndex >= 24) return;
+    if (!state.isActive || state.currentStageIndex >= TOTAL_STAGES) return;
     const newTime = state.timeRemaining - 1;
     if (newTime <= 0) {
       const available = get().getAvailableHeroes();
@@ -98,7 +98,7 @@ export const useDraftStore = create<DraftState>((set, get) => ({
     });
     set({
       currentStageIndex: history.length, radiantPicks, radiantBans, direPicks, direBans,
-      history, isActive: false, isComplete: history.length >= 24, timeRemaining: TURN_TIME,
+      history, isActive: false, isComplete: history.length >= TOTAL_STAGES, timeRemaining: TURN_TIME,
     });
   },
 }));

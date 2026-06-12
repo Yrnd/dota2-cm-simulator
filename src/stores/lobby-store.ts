@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { getSupabase, isOnline } from '@/lib/supabase';
-import { CM_STAGES, DraftStage, TURN_TIME, getRandomAvailableHero } from '@/lib/cm-rules';
+import { CM_STAGES, DraftStage, TURN_TIME, TOTAL_STAGES, getRandomAvailableHero } from '@/lib/cm-rules';
 import { useHeroStore } from './hero-store';
 
 export type Team = 'radiant' | 'dire';
@@ -163,7 +163,7 @@ export const useLobbyStore = create<LobbyState>((set, get) => ({
 
   performAction: async (heroId: number) => {
     const state = get();
-    if (state.currentStageIndex >= 24) return;
+    if (state.currentStageIndex >= TOTAL_STAGES) return;
     if (!state.isMyTurn) return;
 
     const stage = CM_STAGES[state.currentStageIndex];
@@ -184,7 +184,7 @@ export const useLobbyStore = create<LobbyState>((set, get) => ({
       else newDirePicks.push(heroId);
     }
 
-    const isComplete = newIndex >= 24;
+    const isComplete = newIndex >= TOTAL_STAGES;
 
     set({
       currentStageIndex: newIndex,
