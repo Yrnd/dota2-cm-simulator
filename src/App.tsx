@@ -9,6 +9,7 @@ import { LobbyMenu } from './components/LobbyMenu';
 import { useDraftStore } from './stores/draft-store';
 import { useLobbyStore } from './stores/lobby-store';
 import { useCalculationStore } from './stores/calculation-store';
+import { CM_STAGES } from '@/lib/cm-rules';
 import { cn } from './lib/utils';
 
 type Screen = 'menu' | 'lobby_menu' | 'draft';
@@ -38,7 +39,7 @@ export default function App() {
   const currentStageIndex = isLobby ? lobbyIndex : localIndex;
   const timeRemaining = isLobby ? lobbyTime : localTime;
   const stage = isLobby
-    ? (currentStageIndex < 24 ? require('@/lib/cm-rules').CM_STAGES[currentStageIndex] : null)
+    ? (currentStageIndex < 24 ? CM_STAGES[currentStageIndex] : null)
     : localGetStage();
   const isWarning = timeRemaining <= 10;
   const isCritical = timeRemaining <= 5;
