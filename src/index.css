@@ -1,0 +1,410 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Dota 2 official palette */
+    --dota-charcoal: #1b1d23;
+    --dota-dark: #23272f;
+    --dota-panel: #2a2e38;
+    --dota-panel-light: #343945;
+    --dota-border: #3d4250;
+    --dota-gold: #c7a44e;
+    --dota-gold-bright: #e8c95a;
+    --dota-gold-dim: #8a6f30;
+    --dota-red: #b8312a;
+    --dota-red-bright: #e04040;
+    --dota-red-dim: #7a2020;
+    --dota-burgundy: #4a1a1a;
+    --dota-green: #4b9e4b;
+    --dota-green-bright: #5fcc5f;
+    --dota-blue: #4b7eb8;
+    --dota-blue-bright: #5fa8e8;
+    --dota-text: #d4cfbf;
+    --dota-text-bright: #f0e8d0;
+    --dota-text-dim: #7a7568;
+
+    /* CSS variables for Tailwind */
+    --background: 215 25% 10%;
+    --foreground: 40 20% 85%;
+    --card: 215 20% 13%;
+    --card-foreground: 40 20% 85%;
+    --popover: 215 20% 13%;
+    --popover-foreground: 40 20% 85%;
+    --primary: 42 55% 55%;
+    --primary-foreground: 215 25% 10%;
+    --secondary: 215 18% 16%;
+    --secondary-foreground: 40 15% 80%;
+    --muted: 215 18% 16%;
+    --muted-foreground: 40 10% 50%;
+    --accent: 215 18% 18%;
+    --accent-foreground: 40 15% 85%;
+    --destructive: 0 60% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 215 15% 22%;
+    --input: 215 18% 16%;
+    --ring: 42 55% 55%;
+    --radius: 2px;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Titling Gothic FB', 'Segoe UI', system-ui, sans-serif;
+    overflow: hidden;
+    background-image:
+      radial-gradient(ellipse at 15% 50%, rgba(74, 26, 26, 0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 85% 50%, rgba(27, 29, 35, 0.3) 0%, transparent 50%),
+      linear-gradient(180deg, #14161b 0%, #1b1d23 50%, #14161b 100%);
+  }
+}
+
+@layer components {
+  /* Dota 2 metallic button */
+  .dota-btn {
+    @apply relative px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition-all duration-150;
+    background: linear-gradient(180deg, #4a505e 0%, #343844 40%, #2a2e38 60%, #343844 100%);
+    border: 1px solid #555a68;
+    border-bottom-color: #1a1d24;
+    border-right-color: #1a1d24;
+    color: var(--dota-text);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+  .dota-btn:hover {
+    background: linear-gradient(180deg, #565c6a 0%, #3e4250 40%, #343844 60%, #3e4250 100%);
+    border-color: #666b7a;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.12);
+  }
+  .dota-btn:active {
+    background: linear-gradient(180deg, #2a2e38 0%, #343844 40%, #3e4250 60%, #343844 100%);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+  }
+  .dota-btn-gold {
+    background: linear-gradient(180deg, #d4a84a 0%, #b8912e 40%, #9a7a24 60%, #b8912e 100%);
+    border: 1px solid #e0b850;
+    border-bottom-color: #6a5018;
+    border-right-color: #6a5018;
+    color: #1a1400;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.3);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.3);
+  }
+  .dota-btn-gold:hover {
+    background: linear-gradient(180deg, #e0b850 0%, #c7a44a 40%, #aa8a30 60%, #c7a44a 100%);
+    box-shadow: 0 2px 8px rgba(200,170,70,0.3), inset 0 1px 0 rgba(255,255,255,0.35);
+  }
+  .dota-btn-red {
+    background: linear-gradient(180deg, #c0403a 0%, #a03028 40%, #802420 60%, #a03028 100%);
+    border: 1px solid #d05048;
+    border-bottom-color: #501818;
+    border-right-color: #501818;
+    color: #ffd0d0;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.15);
+  }
+  .dota-btn-red:hover {
+    background: linear-gradient(180deg, #d04840 0%, #b03830 40%, #902828 60%, #b03830 100%);
+  }
+
+  /* Dota 2 panel with stone/metal texture */
+  .dota-panel {
+    background: linear-gradient(180deg, #2c303c 0%, #252830 100%);
+    border: 1px solid #3d4250;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.04),
+      0 4px 12px rgba(0,0,0,0.5),
+      0 1px 3px rgba(0,0,0,0.3);
+  }
+  .dota-panel-gold {
+    border-color: var(--dota-gold-dim);
+    box-shadow:
+      inset 0 1px 0 rgba(199,164,78,0.1),
+      0 4px 12px rgba(0,0,0,0.5),
+      0 0 20px rgba(199,164,78,0.05);
+  }
+  .dota-panel-header {
+    background: linear-gradient(180deg, #343945 0%, #2a2e38 100%);
+    border-bottom: 1px solid #1a1d24;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+
+  /* Hero grid cell */
+  .hero-cell {
+    @apply relative cursor-pointer overflow-hidden transition-all duration-150;
+    border: 2px solid #2a2e38;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.03);
+  }
+  .hero-cell:hover {
+    border-color: var(--dota-gold);
+    box-shadow: 0 0 12px rgba(199,164,78,0.4), 0 4px 8px rgba(0,0,0,0.5);
+    transform: scale(1.08);
+    z-index: 10;
+  }
+  .hero-cell.picked {
+    border-color: var(--dota-gold-dim);
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+  .hero-cell.picked:hover {
+    transform: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  }
+  .hero-cell.banned {
+    border-color: var(--dota-red-dim);
+    opacity: 0.25;
+    cursor: not-allowed;
+  }
+  .hero-cell.banned:hover {
+    transform: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  }
+
+  /* Draft slot */
+  .draft-slot {
+    @apply relative overflow-hidden;
+    border: 2px solid #2a2e38;
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.5), 0 2px 4px rgba(0,0,0,0.3);
+  }
+  .draft-slot-empty {
+    background: linear-gradient(180deg, #1e2028 0%, #181a20 100%);
+    border-color: #2a2e38;
+  }
+  .draft-slot-active {
+    border-color: var(--dota-gold);
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.5), 0 0 12px rgba(199,164,78,0.4);
+    animation: slot-pulse 1.5s ease-in-out infinite;
+  }
+
+  /* Dota filter buttons */
+  .dota-filter {
+    @apply relative px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider transition-all duration-150 cursor-pointer;
+    background: linear-gradient(180deg, #343945 0%, #282c36 100%);
+    border: 1px solid #3d4250;
+    border-bottom-color: #1a1d24;
+    color: var(--dota-text-dim);
+    text-shadow: 0 1px 1px rgba(0,0,0,0.5);
+  }
+  .dota-filter:hover {
+    color: var(--dota-text);
+    background: linear-gradient(180deg, #3e4250 0%, #343945 100%);
+    border-color: #4a4e5c;
+  }
+  .dota-filter.active {
+    background: linear-gradient(180deg, #4a3a1a 0%, #3a2a10 100%);
+    border-color: var(--dota-gold-dim);
+    color: var(--dota-gold-bright);
+    text-shadow: 0 0 6px rgba(199,164,78,0.3);
+  }
+  .dota-filter.active-red {
+    background: linear-gradient(180deg, #4a1a1a 0%, #3a1010 100%);
+    border-color: var(--dota-red-dim);
+    color: var(--dota-red-bright);
+  }
+  .dota-filter.active-green {
+    background: linear-gradient(180deg, #1a3a1a 0%, #103010 100%);
+    border-color: #3a6a3a;
+    color: var(--dota-green-bright);
+  }
+  .dota-filter.active-blue {
+    background: linear-gradient(180deg, #1a2a4a 0%, #102040 100%);
+    border-color: #3a5a8a;
+    color: var(--dota-blue-bright);
+  }
+
+  /* Scrollbar */
+  .scrollbar-thin::-webkit-scrollbar { width: 4px; }
+  .scrollbar-thin::-webkit-scrollbar-track { background: #1a1d24; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background: #3d4250; border-radius: 2px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #4a4e5c; }
+}
+
+/* Keyframes */
+@keyframes slot-pulse {
+  0%, 100% { box-shadow: inset 0 0 8px rgba(0,0,0,0.5), 0 0 8px rgba(199,164,78,0.3); }
+  50% { box-shadow: inset 0 0 8px rgba(0,0,0,0.5), 0 0 16px rgba(199,164,78,0.6); }
+}
+@keyframes timer-pulse {
+  0%, 100% { text-shadow: 0 0 8px rgba(220,50,50,0.6); }
+  50% { text-shadow: 0 0 20px rgba(220,50,50,0.9), 0 0 40px rgba(220,50,50,0.3); }
+}
+@keyframes fill-slot {
+  0% { transform: scale(0.85); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes slide-in {
+  from { transform: translateY(6px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.animate-timer-pulse { animation: timer-pulse 1s ease-in-out infinite; }
+.animate-fill-slot { animation: fill-slot 0.25s ease-out; }
+.animate-slide-in { animation: slide-in 0.2s ease-out; }
+
+/* Gold text glow */
+.text-glow-gold {
+  text-shadow: 0 0 6px rgba(199,164,78,0.3), 0 1px 2px rgba(0,0,0,0.5);
+}
+.text-glow-red {
+  text-shadow: 0 0 8px rgba(220,50,50,0.5), 0 1px 2px rgba(0,0,0,0.5);
+}
+
+/* ═══════════ RESPONSIVE MEDIA QUERIES ═══════════ */
+
+/* ─── 1920x1080 (max) ─── */
+@media (min-width: 1920px) {
+  .hero-grid-container { grid-template-columns: repeat(12, 1fr); }
+  .draft-sidebar { width: 280px; }
+  .bottom-bar-inner { gap: 1rem; padding: 0.625rem 1rem; }
+}
+
+/* ─── 1600-1919 ─── */
+@media (min-width: 1600px) and (max-width: 1919px) {
+  .hero-grid-container { grid-template-columns: repeat(11, 1fr); }
+  .draft-sidebar { width: 260px; }
+}
+
+/* ─── 1366-1599 (laptop) ─── */
+@media (min-width: 1366px) and (max-width: 1599px) {
+  .hero-grid-container { grid-template-columns: repeat(10, 1fr); }
+  .draft-sidebar { width: 240px; }
+  .bottom-bar-inner { gap: 0.75rem; padding: 0.5rem 0.75rem; }
+}
+
+/* ─── 1280-1365 ─── */
+@media (min-width: 1280px) and (max-width: 1365px) {
+  .hero-grid-container { grid-template-columns: repeat(9, 1fr); }
+  .draft-sidebar { width: 220px; }
+  .filter-bar { flex-wrap: wrap; gap: 0.375rem; }
+  .bottom-bar-inner { flex-wrap: wrap; }
+}
+
+/* ─── 1024-1279 (small laptop) ─── */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .hero-grid-container { grid-template-columns: repeat(8, 1fr); }
+  .draft-sidebar { width: 200px; }
+  .filter-bar { flex-wrap: wrap; gap: 0.25rem; }
+  .bottom-bar-inner {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.375rem 0.5rem;
+  }
+  .bottom-bar-inner > .bottom-separator { display: none; }
+}
+
+/* ─── 768-1023 (tablet landscape) ─── */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero-grid-container { grid-template-columns: repeat(6, 1fr); }
+  .draft-sidebar {
+    width: 180px;
+  }
+  .draft-sidebar .draft-slot { border-width: 1px; }
+  .filter-bar {
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+  .filter-bar .role-filters { display: none; }
+  .filter-bar .role-filters-mobile { display: flex; }
+  .bottom-bar-inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.375rem;
+    padding: 0.375rem 0.5rem;
+  }
+  .bottom-bar-inner > .bottom-separator { display: none; }
+  .top-bar-title { display: none; }
+}
+
+/* ─── < 768px (mobile/tablet portrait) ─── */
+@media (max-width: 767px) {
+  .hero-grid-container { grid-template-columns: repeat(5, 1fr); }
+  .draft-sidebar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100% !important;
+    height: auto;
+    max-height: 40vh;
+    flex-direction: row !important;
+    z-index: 40;
+    border-left: none;
+    border-top: 1px solid #2a2e38;
+    overflow-x: auto;
+  }
+  .draft-sidebar > div { min-width: 50%; flex-shrink: 0; }
+  .filter-bar { flex-wrap: wrap; gap: 0.25rem; }
+  .filter-bar .role-filters { display: none; }
+  .filter-bar .role-filters-mobile { display: flex; }
+  .filter-bar .attr-filters img { display: none; }
+  .bottom-bar-inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+  }
+  .bottom-bar-inner > .bottom-separator { display: none; }
+  .top-bar-title { display: none; }
+  .hero-cell .hero-name-label { font-size: 6px; }
+  .draft-panel-header-text { font-size: 8px; }
+  .timer-display { font-size: 1rem; }
+}
+
+/* ─── < 480px (small mobile) ─── */
+@media (max-width: 479px) {
+  .hero-grid-container { grid-template-columns: repeat(4, 1fr); }
+  .draft-sidebar { max-height: 35vh; }
+  .timer-display { font-size: 0.875rem; }
+}
+
+/* ─── Height-specific adjustments ─── */
+@media (max-height: 700px) {
+  .hero-grid-scroll { max-height: 45vh; }
+  .top-bar-inner { padding: 0.25rem 0.75rem; }
+  .draft-timeline-bar { padding: 0.25rem 0.75rem; }
+}
+
+@media (min-height: 900px) {
+  .hero-grid-scroll { max-height: 65vh; }
+}
+
+/* ─── Desktop hover enhancements ─── */
+@media (hover: hover) and (pointer: fine) {
+  .hero-cell:hover {
+    border-color: var(--dota-gold);
+    box-shadow: 0 0 12px rgba(199,164,78,0.4), 0 4px 8px rgba(0,0,0,0.5);
+    transform: scale(1.08);
+    z-index: 10;
+  }
+}
+
+/* ─── Touch devices: disable hover scale ─── */
+@media (hover: none) {
+  .hero-cell:hover {
+    transform: none;
+  }
+  .hero-cell:active {
+    border-color: var(--dota-gold);
+    box-shadow: 0 0 8px rgba(199,164,78,0.3);
+  }
+}
+
+/* ─── Print ─── */
+@media print {
+  body { background: white; color: black; }
+  .dota-panel-header, .draft-timeline-bar, .bottom-bar { display: none; }
+}
+
+/* ─── Reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ─── Role filters mobile show/hide ─── */
+.role-filters-mobile { display: none; }
